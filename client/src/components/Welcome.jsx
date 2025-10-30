@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react";
+import React , { useState, useEffect, useContext } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { Loader } from "./";
+import { TransactionProvider } from "../context/TransactionContext";
 
 const Welcome = () => {
+
+  // const { value } = useContext(TransactionProvider);
+  
 
     const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
@@ -36,7 +40,7 @@ const Welcome = () => {
         </p>
         <button
             type="button"
-            onclick={connectWallet}
+            onClick={connectWallet}
             className="flex flex-row justify-center items-centre my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd] ">
             <p className="text-white text-base font-semibold">Connect Wallet</p>
         </button>
