@@ -4,6 +4,8 @@ pragma solidity ^0.8.0;
 
 contract Transactions {
 
+  // error  NotSuccessFul();
+
   uint256 transactionCount;
 
   event Transfer(address from,address to,uint amount,string message,uint timestamp,string keyword);
@@ -19,9 +21,21 @@ contract Transactions {
   }
   TransferStruct[] transactions;
 
+  // receive() external payable {}
+
+
   function addToBlockchain(address payable receiver,uint amount,string memory message,string memory keyword) public {
     transactionCount += 1;
+    // (bool success,) = receiver.call{value:amount}("");
+    // if(!success){
+    //   revert NotSuccessFul();
+    // }
+    // receiver.transfer(amount);
+    // (bool success, ) = receiver.call{value: amount}("");
+    // require(success, "ETH transfer failed");
+
     transactions.push(TransferStruct(msg.sender,receiver,amount,message,block.timestamp,keyword));
+    
     emit Transfer(msg.sender,receiver,amount,message,block.timestamp,keyword);
   }
 

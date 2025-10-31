@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useMemo } from "react";
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
+import {shortenAddress} from "../utils/shortenAddress";
 
 export const TransactionContext = React.createContext();
 
@@ -47,7 +48,7 @@ export const TransactionProvider = ({ children }) => {
   const [formData, setFormData] = useState({
     addressTo: "",
     amount: "",
-    keywork: "",
+    keyword: "",
     message: "",
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -92,10 +93,10 @@ export const TransactionProvider = ({ children }) => {
     try {
       if (!ethereum) return alert("Please install Metamask");
       // get the data from form.
-      const { addressTo, amount, keywork, message } = formData;
-      const parsedAmount = ethers.utils.parseEther(amount);
+      const { addressTo, amount, keyword, message } = formData;
+      const parsedAmount = ethers.parseEther(amount);
       // now this transactionContract has all the fn of our smartcontract.
-      const transactionContract = getEthereumContract();
+      const transactionContract = await getEthereumContract();
       await ethereum.request({
         method: "eth_sendTransaction",
         params: [
@@ -107,11 +108,13 @@ export const TransactionProvider = ({ children }) => {
           },
         ],
       });
+
       const transactionHash = await transactionContract.addToBlockchain(
         addressTo,
         parsedAmount,
         message,
-        keywork
+        keyword,
+        // {value: parsedAmount}
       );
       setIsLoading(true);
       console.log(`Loading ${transactionHash}`);
@@ -120,12 +123,18 @@ export const TransactionProvider = ({ children }) => {
       console.log(`Success ${transactionHash}`);
 
       const transactionCount = await transactionContract.getTransactionCount();
-      setTransactionCount(transactionCount.toNumber());
+      setTransactionCount(Number(transactionCount));
+      console.log(transactionCount);
     } catch (error) {
       console.log(error);
       throw new Error("No ethereum object");
     }
   };
+
+
+
+
+
 
   // useeffect kehta h ki jb bhi app ya page load ho ek baar issey chlao jo fn andr hai or [] zero h mtlb ek baar chlana
   useEffect(() => {

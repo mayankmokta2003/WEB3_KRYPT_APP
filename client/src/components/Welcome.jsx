@@ -1,10 +1,11 @@
-import React , { useState, useEffect, useContext } from "react";
+import React , { useState, useEffect, useContext, useMemo } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { Loader } from "./";
 // import Loader from "./Loader";
 import { TransactionContext } from "../context/TransactionContext";
+import {shortenAddress} from "../utils/shortenAddress";
 
 const Welcome = () => {
 
@@ -27,10 +28,11 @@ const Welcome = () => {
       />
     );
 
+
     const handleSubmit = (e) => {
-      const { addressTo, amount, keywork, message } = formData;
+      const { addressTo, amount, keyword, message } = formData;
       e.preventDefault();
-      if(!addressTo || !amount || !keywork || !message) return;
+      if(!addressTo || !amount || !keyword || !message) return;
       sendTransaction();
     }
 
@@ -78,30 +80,27 @@ const Welcome = () => {
         <div className="flex justify-between flex-col w-full h-full">
         <div className="flex justify-between items-start">
         <div className="w-10 h-10 rounded-full border-2 border-white flex justify-center items-centre ">
-        <SiEthereum fontSize={25} color="#fff" />
+        <SiEthereum fontSize={25} color="#fff" className="mt-1.5"/>
         
         </div>
         <BsInfoCircle fontSize={25} color="#fff" />
         </div>
         <div>
-            <p className="text-white font-light text-sm">0x12df....3efd</p>
+            <p className="text-white font-light text-sm">{shortenAddress(currentAccount)}</p>
             <p className="text-white font-semibold text-lg mt-1">ETHEREUM</p>
         </div>
         </div>
         </div>
-        <div className="p-5 sm:w-96  w-full flex flex-col justify-start items-centre blue-glassmorphism">
+        <div className="p-5 sm:w-96  w-full flex flex-col justify-start items-centre blue-glassmorphism ">
         {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange}/>
         <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange}/>
-        <Input placeholder="Keyboard (Gif)" name="keywork" type="text" handleChange={handleChange}/>
+        <Input placeholder="Keyboard (Gif)" name="keyword" type="text" handleChange={handleChange}/>
         <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange}/> */}
 
 <Input placeholder="Address To" name="addressTo" type="text" value={formData.addressTo} handleChange={handleChange}/>
 <Input placeholder="Amount (ETH)" name="amount" type="number" value={formData.amount} handleChange={handleChange}/>
-<Input placeholder="Keyword (Gif)" name="keywork" type="text" value={formData.keywork} handleChange={handleChange}/>
+<Input placeholder="Keyword (Gif)" name="keyword" type="text" value={formData.keyword} handleChange={handleChange}/>
 <Input placeholder="Enter Message" name="message" type="text" value={formData.message} handleChange={handleChange}/>
-
-
-
 
 
         <div className="h-[1px] w-full bg-gray-400 my-2 ">
@@ -122,9 +121,6 @@ const Welcome = () => {
         }
         </div>
         </div>
-        
-
-
 
         </div>
 
