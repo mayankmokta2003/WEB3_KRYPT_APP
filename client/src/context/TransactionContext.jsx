@@ -63,8 +63,63 @@ export const TransactionProvider = ({ children }) => {
 
 
 
+  const getAllTransactionss = async () => {
+    try {
+    if (!ethereum) return alert("Please install Metamask");
+    const transactionContract = await getEthereumContract();
+    const availableTransactions = await transactionContract.getAllTransactions();
 
-  
+    const structuredTransactions = availableTransactions.map((transaction) => ({
+      addressTo: transaction.receiver,
+      addressFrom: transaction.sender,
+      message: transaction.message,
+      keyword: transaction.keyword,
+     timestamp: new Date(Number(transaction.timestamp) * 1000).toLocaleString(),
+      // amount: parseInt(transaction.amount._hex) / (10 ** 18)
+      amount: parseInt(transaction.account)
+    }));
+    setTransaction(structuredTransactions);
+    console.log(structuredTransactions);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+  const checkIfWalletIsConnected = async () => {
+    try {
+      if (!ethereum) return alert("Please install Metamask");
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      if (accounts.length) {
+        setCurrentAccount(accounts[0]);
+        getAllTransactionss();
+      } else {
+        console.log("No accounts found!");
+      }
+      console.log(accounts);
+
+      // get all the transactions.
+    } catch (error) {
+      console.log(error);
+      throw new Error("No ethereum object");
+    }
+  };
+
+  const checkIfTransactionsExist = async () => {
+    try {
+      const transactionContract = await getEthereumContract();
+      const transactionCount = await transactionContract.getTransactionCount();
+      // we did this to store data permanently so it doesnot get deleted after refreshed.
+      window.localStorage.setItem("transactionCount",transactionCount);
+    } catch (error) {
+      console.log(error);
+      throw new Error("No ethereum object");
+    }
+  }
+
+
   
 
 
