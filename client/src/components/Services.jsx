@@ -4,7 +4,7 @@ import {RiHeart2Fill} from "react-icons/ri"
 
 
 const ServiceCard = ({color,title,icon,subtitle}) => (
-    <div className=" flex flex-row justify-start items-centre white-glassmorphism p-3 m-2 cursor-pointer hover:shadow-xl ">
+    <div className=" flex flex-row justify-start items-centre white-glassmorphism p-3 m-2 cursor-pointer hover:shadow-xl xl:w-150 ">
         <div className={`w-10 h-10 rounded-full flex justify-centre mt items-centre ${color}`}>
         {icon}
         </div>

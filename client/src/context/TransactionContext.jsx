@@ -52,6 +52,7 @@ export const TransactionProvider = ({ children }) => {
     message: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [transactions,setTransaction] = useState([]);
   const [transactionCount, setTransactionCount] = useState(
     localStorage.getItem("transactionCount")
   );
@@ -60,22 +61,12 @@ export const TransactionProvider = ({ children }) => {
     setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
   };
 
-  const checkIfWalletIsConnected = async () => {
-    try {
-      if (!ethereum) return alert("Please install Metamask");
-      const accounts = await ethereum.request({ method: "eth_accounts" });
-      if (accounts.length) {
-        setCurrentAccount(accounts[0]);
-      } else {
-        console.log("No accounts found!");
-      }
-      console.log(accounts);
-      // get all the transactions.
-    } catch (error) {
-      console.log(error);
-      throw new Error("No ethereum object");
-    }
-  };
+
+
+
+  
+  
+
 
   const connectWallet = async () => {
     try {
@@ -139,6 +130,7 @@ export const TransactionProvider = ({ children }) => {
   // useeffect kehta h ki jb bhi app ya page load ho ek baar issey chlao jo fn andr hai or [] zero h mtlb ek baar chlana
   useEffect(() => {
     checkIfWalletIsConnected();
+    // checkIfTransactionsExist();
   }, []);
 
   return (
@@ -150,6 +142,8 @@ export const TransactionProvider = ({ children }) => {
         setFormData,
         handleChange,
         sendTransaction,
+        isLoading,
+        transactions
       }}
     >
       {children}
